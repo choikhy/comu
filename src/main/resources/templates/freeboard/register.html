@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout1}">
+
+<head>
+    <title>Board Register</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    자유게시판
+                </div>
+                <div class="card-body">
+                    <form action="/freeboard/register" method="post">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">제목</span>
+                            <input type="text" name="title" id="title" class="form-control" placeholder="제목 입력">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">내용</span>
+                            <textarea class="form-control d-flex" rows="16" name="content" id="content" style="resize: none" placeholder="내용 입력"></textarea>
+                        </div>
+                        <input type="hidden" name="writer" th:value="${writer}">
+                        <div class="my-4">
+                            <div class="float-right">
+                                <button type="submit" class="btn btn-primary">등록</button>
+                                <button type="button" class="btn btn-secondary" onclick="reset()">초기화</button>
+                                <button type="button" class="btn btn-light border-dark" onclick="self.location='/freeboard/list'">목록</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!--end of body-->
+            </div><!--end card-->
+        </div><!--end col-->
+    </div><!--end row-->
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+    const  errors = [[${errors}]]
+    console.log(errors)
+
+    let errorMsg = ''
+
+    if(errors){
+        for(let i = 0; i < errors.length; i ++){
+            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+        }
+        alert(errorMsg)
+    }
+
+    function reset(){
+        var title = document.getElementById("title")
+        var content = document.getElementById("content")
+
+        title.value = ""
+        content.value = ""
+    }
+</script>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout2}">
+<div layout:fragment="content">
+  <div class="card" style="margin-bottom: 10vh">
+      <div class="card text-center" id="menu">
+        <div>
+          <h1>장바구니</h1>
+        </div>
+        <div class="card mx-2 mb-3" th:each="men : ${menu}">
+          <table>
+            <tr>
+              <td style="width: 25%">
+                <img th:src="${men.imgUrl}" class="rounded" style="width: 100%">
+              </td>
+              <td>
+                <h1>[[${men.name}]]</h1>
+                <small>[[${men.intro}]]</small>
+                <h1 th:text="${#numbers.formatInteger(men.price, 3, 'COMMA')} + '&#8361;'"></h1>
+                <input type="text" class="prices" th:value="${men.price}">
+              </td>
+            </tr>
+          </table>
+          <span class="position-absolute" style="right: 1%; top: 1%; font-size:30pt; line-height:35px; cursor: pointer;" th:onclick="|location.href='@{/foodmall/dropcart(meno=${men.meNo})}'|">
+              ×
+          </span>
+        </div>
+        <div class="mb-3">
+          <div>
+            <h1 class="d-inline">총 금액 : </h1>
+            <h1 class="d-inline" id="totalPrice"></h1>
+            <h1 class="d-inline">원</h1>
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary">결제하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script layout:fragment="script" th:inline="javascript">
+  var totalPrice = 0;
+  for (var i = 0; i < document.getElementsByClassName('prices').length; i++) {
+    totalPrice = totalPrice + parseInt(document.getElementsByClassName('prices')[i].value);
+  }
+
+  document.getElementById('totalPrice').innerHTML = totalPrice
+</script>

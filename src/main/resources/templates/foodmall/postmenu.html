@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout2}">
+
+
+<div layout:fragment="content">
+  <div class="card " style="margin-bottom: 10vh">
+    <div class="card-body px-lg-5">
+      <form action="/foodmall/postmenu" method="post" id="form" enctype="multipart/form-data">
+        <div class="text-center">
+          <input type="hidden" value="id" name="managerId">
+          <div class="input-group mb-2">
+            <span class="input-group-text w-25">메뉴이름</span>
+            <input type="text" class="form-control" name="name" id="name">
+          </div>
+          <div class="input-group mb-2">
+            <span class="input-group-text w-25">메뉴소개</span>
+            <textarea class="form-control" rows="15" style="resize: none" name="intro"></textarea>
+          </div>
+          <div class="input-group mb-3">
+            <label class="input-group-text w-25">가격</label>
+            <input type="text" id="price" class="form-control" name="price" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+          </div>
+          <div class="input-group">
+            <label class="input-group-text w-25">메뉴 이미지 등록</label>
+            <input type="file" class="form-control" name="itemImgFile">
+          </div>
+          <input type="hidden" th:value="${param.fno}" name="fno">
+        </div>
+        <div class="text-center">
+          <button type="button" class="btn btn-primary" onclick="doPost()">등록</button>
+          <button type="button" class="btn btn-secondary" onclick="self.location='/foodmall/main'">취소</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+  function doPost(){
+
+    var form = document.getElementById('form')
+    var name = document.getElementsByName('name')[0].value;
+    var intro = document.getElementsByName('intro')[0].value;
+    var price = document.getElementsByName('price')[0].value;
+
+    if(name == null || name === ''){
+      alert("메뉴 이름을 입력해주세요")
+      return;
+    }
+    if(intro == null || intro === ''){
+      alert("메뉴 소개를 입력해주세요")
+      return;
+    }
+    if(price == null || price === ''){
+      alert("가격을 입력해주세요")
+      return;
+    }
+
+    form.submit();
+  }
+
+  $(document).ready(function(){
+    var errorMessage = [[${errorMessage}]];
+    if(errorMessage != null){
+      alert(errorMessage);
+    }
+
+    bindDomEvent();
+
+  });
+  function bindDomEvent(){
+    $(".custom-file-input").on("change", function() {
+      var fileName = $(this).val().split("\\").pop();  //이미지 파일명
+      var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
+      fileExt = fileExt.toLowerCase(); //소문자 변환
+
+      if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+        alert("이미지 파일만 등록이 가능합니다.");
+        return;
+      }
+
+      $(this).siblings(".custom-file-label").html(fileName);
+    });
+  }
+  function inputContact(object) {
+    if (object.value.length > object.maxLength) {
+      object.value = object.value.slice(0, object.maxLength);
+    }
+  }
+</script>

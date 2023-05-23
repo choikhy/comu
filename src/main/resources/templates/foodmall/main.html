@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout2}">
+
+<div layout:fragment="content">
+  <div class="location w-100 d-inline-block text-center dropdown bg-dark">
+    <button class="btn dropdown-toggle text-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+      <th:block sec:authorize="isAnonymous()">
+        로그인이 필요한 서비스 입니다.
+      </th:block>
+      <th:block sec:authorize="isAuthenticated()">
+        [[${member.adrs}]] [[${member.detailadrs}]]
+      </th:block>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+      <th:block sec:authorize="isAnonymous()">
+        <li><a class="dropdown-item" href="/member/login">로그인</a></li>
+      </th:block>
+      <th:block sec:authorize="isAuthenticated()">
+        <li><a class="dropdown-item" href="/foodmall/mycart">장바구니</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="/member/logout">로그아웃</a></li>
+      </th:block>
+    </ul>
+  </div>
+  <button type="button" class="btn btn-primary w-100 text-center text-white font-weight-bold" onclick="self.location = '/foodmall/post' ">
+    상품등록
+  </button>
+
+  <div class="card" style="margin-bottom: 10vh">
+    <div class="col-md-12 card-body text-center">
+      <a href="/foodmall/list?cate=zokbo">
+        <span class="col-md-3 d-inline-block">
+          <img src="/assets/dist/img/food/1.jpg" class="rounded mx-auto d-block">
+          족발·보쌈
+        </span>
+      </a>
+      <a href="/foodmall/list?cate=soup">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/2.jpg" class="rounded mx-auto d-block">
+        찜·탕·찌개
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=japan">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/3.jpg" class="rounded mx-auto d-block">
+        돈까스·회·일식
+      </span>
+      </a>
+    </div>
+    <div class="col-md-12 card-body text-center">
+      <a href="/foodmall/list?cate=pizza">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/4.jpg" class="rounded mx-auto d-block">
+        피자
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=roast">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/5.jpg" class="rounded mx-auto d-block">
+        고기·구이
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=night">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/6.jpg" class="rounded mx-auto d-block">
+        야식
+      </span>
+      </a>
+    </div>
+    <div class="col-md-12 card-body text-center">
+      <a href="/foodmall/list?cate=western">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/7.jpg" class="rounded mx-auto d-block">
+        양식
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=chick">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/8.jpg" class="rounded mx-auto d-block">
+        치킨
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=china">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/9.jpg" class="rounded mx-auto d-block">
+        중식
+      </span>
+      </a>
+    </div>
+    <div class="col-md-12 card-body text-center">
+      <a href="/foodmall/list?cate=asian">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/10.jpg" class="rounded mx-auto d-block">
+        아시안
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=rice">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/11.jpg" class="rounded mx-auto d-block">
+        백반·죽·국수
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=launchbox">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/12.png" class="rounded mx-auto d-block">
+        도시락
+      </span>
+      </a>
+    </div>
+    <div class="col-md-12 card-body text-center">
+      <a href="/foodmall/list?cate=snack">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/13.jpg" class="rounded mx-auto d-block">
+        분식
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=coffee">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/14.png" class="rounded mx-auto d-block">
+        카페·디저트
+      </span>
+      </a>
+      <a href="/foodmall/list?cate=fast">
+      <span class="col-md-3 d-inline-block">
+        <img src="/assets/dist/img/food/15.jpg" class="rounded mx-auto d-block">
+        패스트푸드
+      </span>
+      </a>
+    </div>
+  </div>
+  <div style="position: fixed; left: 2%; top: 0%;">
+    <a href="/">
+      <img src="/assets/dist/img/Logo.png" style="width: 20%; height: 20%">
+    </a>
+  </div>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+  document.getElementsByClassName("blog-header")[0].remove();
+</script>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout/layout1}">
+
+<head>
+    <title>Board Read</title>
+</head>
+
+<div layout:fragment="content">
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    Board Read
+                </div>
+                <div class="card-body">
+                    <div class="input-group mb-3">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">제목</span>
+                            <input type="text" class="form-control" th:value="${dto.title}" readonly>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">내용</span>
+                            <textarea class="form-control bg-white" col-sm-5 rows="6" readonly style="resize: none">[[${dto.content}]]</textarea>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">작성자</span>
+                            <input type="text" class="form-control" th:value="${dto.writer}" readonly>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">수정시간</span>
+                            <input type="text" class="form-control"
+                                   th:value="${#temporals.format(dto.modDate,'yyyy-MM-dd HH:mm:ss')}" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="float-right" th:with="link = ${pageRequestDTO.getLink()}">
+                            <th:block th:if="${dto.writer == sessionUser || sessionRole == 'ADMIN'}">
+                                <a th:href="|@{/freeboard/modify(bno=${dto.bno})}&${link}|"
+                                   class="text-decoration-none">
+                                    <button type="button" class="btn btn-secondary">수정</button>
+                                </a>
+                            </th:block>
+                            <a th:href="|@{/freeboard/list}?${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-primary">목록</button>
+                            </a>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="card p-3">
+                        <div th:each="reply : ${replyDTO.dtoList}">
+                            <div class="font-weight-light text-secondary">[[${reply.writer}]]</div>
+                            <div class="d-inline-block">[[${reply.reply}]]</div>
+                            <div class="d-inline-block float-right" th:if="${sessionUser == reply.writer}">
+                                <a href="#" th:onclick="replyDelete([[${reply.rno}]])">삭제</a>
+                            </div>
+                            <hr>
+                        </div>
+                        <form action="/freeboard/reply" method="post" id="replyForm">
+                            <div class="input-group mb-3">
+                                <input type="hidden" name="bno" th:value="${dto.bno}">
+                                <textarea class="form-control" style="resize: none" name="reply"></textarea>
+                                <button class="btn btn-outline-secondary" type="button" onclick="doReply()">댓글등록</button>
+                            </div>
+                        </form>
+                    </div>
+                </div><!--end cardbody-->
+            </div><!--end card-->
+        </div><!--end col-->
+    </div><!--end row-->
+</div>
+
+    <script layout:fragment="script" th:incline="javascript">
+    function doReply(){
+        repl =  document.getElementsByName('reply')[0].value
+        if(repl == null || repl === ''){
+            alert("댓글 내용을 입력해주세요")
+            return;
+        }
+        document.getElementById('replyForm').submit();
+    }
+
+    function replyDelete(thisRno){
+        var form = document.createElement('form');
+        var rno = document.createElement('input');
+        var bno = document.createElement('input');
+
+        rno.setAttribute('type', 'hidden');
+        rno.setAttribute('name', 'rno');
+        rno.setAttribute('value', thisRno);
+        form.appendChild(rno);
+
+        form.setAttribute('action', 'delReply')
+        form.setAttribute('method', 'post')
+
+        document.body.appendChild(form);
+
+        form.submit();
+
+    }
+    </script>
+</html>

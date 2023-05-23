@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout2}">
+
+<div layout:fragment="content">
+  <div class="cate w-100 d-inline-block text-center dropdown bg-white" id="cate">
+  </div>
+  <div class="card mb-5">
+    <div class="card-body">
+      <th:block th:each="food : ${foodlist}">
+        <div class="card mb-3">
+          <a th:href="|@{/foodmall/restaurant(fno =${food.fno})}|" style="text-decoration: none; color: black">
+            <table>
+              <tr>
+                <td style="width: 25%">
+                  <img th:src="${food.imgUrl}" class="img-thumbnail" style="width: 100%">
+                </td>
+                <td>
+                  <h1>[[${food.name}]]</h1>
+                </td>
+              </tr>
+            </table>
+          </a>
+        </div>
+      </th:block>
+      <th:block th:if="${foodlist.size() == 0}">
+        <div class="text-center">
+          <h1>정보가 없습니다</h1>
+        </div>
+      </th:block>
+    </div>
+  </div>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+  var getCate = getParameter("cate");
+  var cate = '';
+
+  if(getCate != null){
+    if(getCate === 'zokbo'){
+      cate = "족발·보쌈"
+    }
+    if(getCate === 'soup'){
+      cate = "찜·탕·찌개"
+    }
+    if(getCate === 'japan'){
+      cate = "돈까스·회·일식"
+    }
+    if(getCate === 'pizza'){
+      cate = "피자"
+    }
+    if(getCate === 'roast'){
+      cate = "고기·구이"
+    }
+    if(getCate === 'night'){
+      cate = "야식"
+    }
+    if(getCate === 'western'){
+      cate = "양식"
+    }
+    if(getCate === 'chick'){
+      cate = "치킨"
+    }
+    if(getCate === 'china'){
+      cate = "중식"
+    }
+    if(getCate === 'asian'){
+      cate = "아시안"
+    }
+    if(getCate === 'rice'){
+      cate = "백반·죽·국수"
+    }
+    if(getCate === 'launchbox'){
+      cate = "도시락"
+    }
+    if(getCate === 'snack'){
+      cate = "분식"
+    }
+    if(getCate === 'coffee'){
+      cate = "카페·디저트"
+    }
+    if(getCate === 'fast'){
+      cate = "패스트푸드"
+    }
+  }
+
+  $('#cate').prepend('<h1>'+cate+'</h1>');
+
+  function getParameter(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+</script>

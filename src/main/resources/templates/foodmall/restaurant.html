@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout2}">
+<div layout:fragment="content">
+  <div class="card" style="margin-bottom: 10vh">
+    <div class="card-body">
+      <div class="text-center">
+        <img th:src="${rest.imgUrl}" class="rounded img-thumbnail" style="width: 50%; display: inline-block">
+        <h1>[[${rest.name}]]</h1>
+      </div>
+      <hr>
+      <div class="gobutton btn-group d-flex">
+        <button type="button" class="btn btn-outline-primary" onclick="focusIntro()">소개</button>
+        <button type="button" class="btn btn-outline-primary" onclick="focusInfo()">정보</button>
+        <button type="button" class="btn btn-outline-primary" onclick="focusMenu()">메뉴</button>
+        <button type="button" class="btn btn-outline-primary" onclick="focusReview()">리뷰</button>
+      </div>
+      <hr>
+      <div class="text-center" id="intro">
+        <h1>소개</h1>
+        <textarea class="w-100 text-center intro" style="border: none; text-decoration: none; resize: none; cursor:default;" readonly>[[${rest.intro}]]</textarea>
+      </div>
+      <hr>
+      <div class="text-center" id="info">
+        <h1>정보</h1>
+        <div class="input-group">
+          <label class="input-group-text w-25">상호명</label>
+          <label class="form-control">[[${rest.name}]]</label>
+        </div>
+        <div class="input-group">
+          <label class="input-group-text w-25">영업시간</label>
+          <label class="form-control">[[${rest.timeOpen}]] ~ [[${rest.timeClose}]]</label>
+        </div>
+        <div class="input-group">
+          <label class="input-group-text w-25">휴무일</label>
+          <label class="form-control">[[${rest.close}]]</label>
+        </div>
+        <div class="input-group">
+          <label class="input-group-text w-25">전화번호</label>
+          <label class="form-control">[[${rest.contact1}]]-[[${rest.contact2}]]-[[${rest.contact3}]]</label>
+        </div>
+        <div class="input-group">
+          <label class="input-group-text w-25">가게주소</label>
+          <label class="form-control">[[${rest.adrs}]] [[${rest.detailAdrs}]]</label>
+        </div>
+      </div>
+      <hr>
+      <div class="card text-center" id="menu">
+        <div>
+          <h1>메뉴</h1>
+          <button class="btn btn-outline-success position-absolute" style="right: 3%; top: 0%" type="button" onclick="goPostMenu()">메뉴 등록</button>
+        </div>
+        <div class="card mx-2 mb-3" th:each="men : ${menu}">
+          <table>
+            <tr>
+              <td style="width: 25%">
+                <img th:src="${men.imgUrl}" class="rounded" style="width: 100%">
+              </td>
+              <td>
+                <h1>[[${men.name}]]</h1>
+                <small>[[${men.intro}]]</small>
+                <h1 th:text="${#numbers.formatInteger(men.price, 3, 'COMMA')} + '&#8361;'"></h1>
+                <a class="btn btn-outline-success" th:href="@{/foodmall/insertcart(fno=${param.fno},meno=${men.meNo})}">담기</a>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center" id="review">
+        <button class="btn btn-outline-info position-absolute" style="right: 3%" data-bs-toggle="modal" data-bs-target="#exampleModal">리뷰 작성</button>
+        <h1>리뷰</h1>
+        <div class="card mb-3" th:each="rev : ${review.dtoList}">
+          <p>[[${rev.review}]]</p>
+          <small>[[${rev.writer}]]</small>
+          <th:block th:if="${sessionUser == rev.writer}">
+            <span class="position-absolute" style="right: 0%">
+              <button type="button" class="btn btn-outline-danger" style="top:50%; transform:translateY(50%);">삭제</button>
+            </span>
+          </th:block>
+          <th:block th:if="${rev.rating == 1}">
+            <small>별점 : ★☆☆☆☆</small>
+          </th:block>
+          <th:block th:if="${rev.rating == 2}">
+            <small>별점 : ★★☆☆☆</small>
+          </th:block>
+          <th:block th:if="${rev.rating == 3}">
+            <small>별점 : ★★★☆☆</small>
+          </th:block>
+          <th:block th:if="${rev.rating == 4}">
+            <small>별점 : ★★★★☆</small>
+          </th:block>
+          <th:block th:if="${rev.rating == 5}">
+            <small>별점 : ★★★★★</small>
+          </th:block>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span class="align-content-center" style="left: 0; right: 0; margin: 0 auto; bottom: 3%; position: fixed; border: solid 1px black; border-radius: 50%; width: 40px; height: 40px; cursor: pointer;" onclick="javascript:window.scrollTo(0,0)">
+    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-arrow-bar-up" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M8 10a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 3.707V9.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/>
+    </svg>
+  </span>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="/foodmall/review" method="post">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">리뷰 작성</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="star-rating space-x-4 mx-auto mb-4">
+              <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings" checked="checked"/>
+              <label for="5-stars" class="star pr-4">★</label>
+              <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+              <label for="4-stars" class="star">★</label>
+              <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+              <label for="3-stars" class="star">★</label>
+              <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+              <label for="2-stars" class="star">★</label>
+              <input type="radio" id="1-star" name="rating" value="1" v-model="ratings"/>
+              <label for="1-star" class="star">★</label>
+            </div>
+            <div class="input-group mb-2" id="writer">
+              <label class="input-group-text w-25">작성자</label>
+              <input class="form-control" type="text" name="writer" th:value="${member.name}" readonly>
+            </div>
+            <div class="input-group" id="comment">
+            <label class="input-group-text w-25">내용</label>
+            <textarea class="form-control" style="resize: none" rows="15" name="review"></textarea>
+            </div>
+            <input type="hidden" name="fno" th:value="${rest.fno}">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">저장</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeRev()">닫기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script layout:fragment="script" th:inline="javascript">
+  function focusIntro(){
+    document.getElementById("intro").scrollIntoView();
+  }
+  function focusInfo(){
+    document.getElementById("info").scrollIntoView();
+  }
+  function focusMenu(){
+    document.getElementById("menu").scrollIntoView();
+  }
+  function focusReview(){
+    document.getElementById("review").scrollIntoView();
+  }
+
+
+  function closeRev(){
+    document.getElementsByName("review")[0].value = '';
+  }
+
+  function goPostMenu(){
+    self.location = "/foodmall/postmenu?fno=" + [[${rest.fno}]]
+  }
+
+  function adjustHeight() {
+    var textEle = $('textarea');
+    textEle[0].style.height = 'auto';
+    var textEleHeight = textEle.prop('scrollHeight');
+    textEle.css('height', textEleHeight);
+  };
+
+  adjustHeight();
+</script>

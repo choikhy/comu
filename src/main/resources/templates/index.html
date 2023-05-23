@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout1}">
+
+
+<div layout:fragment="content">
+    <div class="jumbotron p-4 p-md-5 rounded text-center">
+        <h1 class="display-4 text-black">광고문의</h1>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">자유게시판 최신글<a class="small float-right" href="/freeboard/list" style="text-decoration-line: none"><더보기></a></strong>
+                    <span>
+                        <table style="margin: auto" class="text-center" width="100%">
+                            <thead>
+                            <tr class="text-center">
+                                <th scope="col">제목</th>
+                                <th scope="col">작성자</th>
+                                <th scope="col">작성시간</th>
+                            </tr>
+                            </thead>
+                            <tr th:each="dto : ${responseDTO.dtoList}" class="text-center">
+                                <td style="width: 60%">
+                                    <a th:href="|@{/freeboard/read(bno =${dto.bno})}&${link}|">[[${dto.title}]]</a>
+                                </td>
+                                <td style="width: 20%; font-size: small">[[${dto.writer}]]</td>
+                                <td style="width: 20%; font-size: small">[[${#temporals.format(dto.regDate, 'HH:mm:ss')}]]</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-success">이미지게시판 최신글<a class="small float-right" href="/imgboard/list" style="text-decoration-line: none"><더보기></a></strong>
+                    <span>
+                        <div>
+                            <span th:each="dto : ${imgResponseDTO.dtoList}" class="float-left w-25 mr-4">
+                                <a th:href="|@{/imgboard/read(bno =${dto.bno})}&${link}|">
+                                    <span><img th:src="${dto.imgUrl}" class="img-thumbnail" style="width: 100%; height: 13vh;"></span>
+                                </a>
+                                <div class="text-center">
+                                    <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><a th:href="|@{/imgboard/read(bno =${dto.bno})}&${link}|">[[${dto.title}]]</a></div>
+                                    <div style="font-size: small">[[${dto.writer}]]</div>
+                                    <div style="font-size: small">[[${#temporals.format(dto.regDate, 'HH:mm:ss')}]]</div>
+                                </div>
+                            </span>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <a href="/foodmall/main">
+                <img src="/assets/dist/img/foodmall.png" style="width: 100%">
+            </a>
+        </div>
+    </div>
+</div>
+
+</div>

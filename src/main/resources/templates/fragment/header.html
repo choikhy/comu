@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<div th:fragment="header">
+  <div class="container">
+    <header class="blog-header py-3">
+      <div class="row flex-nowrap justify-content-between align-items-center">
+        <div class="col-4">
+        </div>
+        <div class="col-4 text-center">
+          <a class="blog-header-logo text-dark font-italic" href="/"><img th:src="@{/assets/dist/img/Logo.png}" style="display: inline-block; width: 48px; height: 48px">304Class</a>
+        </div>
+        <div class="col-4 d-flex justify-content-end align-items-center">
+          <a class="btn btn-sm btn-outline-secondary" href="/member/login" sec:authorize="isAnonymous()">로그인</a>
+          <a class="btn btn-sm btn-outline-secondary" href="/member/update" sec:authorize="isAuthenticated()">정보수정</a>
+          <a class="btn btn-sm btn-outline-secondary" href="/member/logout" sec:authorize="isAuthenticated()">로그아웃</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="nav-scroller py-1 mb-1">
+      <nav class="nav d-flex justify-content-between">
+        <a class="p-2 text-muted" href="/">메인</a>
+        <a class="p-2 text-muted" href="/freeboard/list">자유게시판</a>
+        <a class="p-2 text-muted" href="/imgboard/list">이미지게시판</a>
+        <a class="p-2 text-muted" href="/qna/list">자주묻는질문</a>
+        </nav>
+    </div>
+</html>
